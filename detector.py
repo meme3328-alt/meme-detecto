@@ -1,26 +1,31 @@
 import os
 from telegram import Update
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
+from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
 
-# Récupère le token depuis les variables d'environnement Render
+# Get the token from Render environment variables
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("👋 Salut ! Je suis ton bot Telegram de détection de mèmes.")
+    await update.message.reply_text("👋 Hi! I am your Telegram meme detection bot.")
 
 async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(f"Tu as dit : {update.message.text}")
+    await update.message.reply_text(f"You said: {update.message.text}")
 
 def main():
+    if not TOKEN:
+        raise ValueError("❌ TELEGRAM_TOKEN not found in environment variables!")
+
+    # Create the application with the correct builder
     app = Application.builder().token(TOKEN).build()
 
-    # Commande /start
+    # /start command
     app.add_handler(CommandHandler("start", start))
-    # Répète tout texte envoyé
+
+    # Reply to any text message
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
 
-    print("✅ Bot lancé ! En attente de messages Telegram...")
-    app.run_polling(close_loop=False)
+    print("✅ Bot started! Waiting for Telegram messages...")
+    app.run_polling(allowed_updates=Update.ALL_TYPES)
 
 if __name__ == "__main__":
     main()
