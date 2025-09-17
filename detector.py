@@ -1,17 +1,17 @@
 import os
-from telegram import Update
+from telegram import 
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
 
 # Récupère le token depuis Render
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def start(context: ContextTypes.DEFAULT_TYPE):
     """Répond à la commande /start"""
     await update.message.reply_text("👋 Salut ! Je suis ton bot Telegram de détection de mèmes.")
 
-async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def echo( context: ContextTypes.DEFAULT_TYPE):
     """Répète les messages envoyés par l'utilisateur"""
-    await update.message.reply_text(f"Tu as dit : {update.message.text}")
+    await message.reply_text(f"Tu as dit : {update.message.text}")
 
 def main():
     if not TOKEN:
@@ -31,3 +31,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
